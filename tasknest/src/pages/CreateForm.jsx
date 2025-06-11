@@ -16,11 +16,29 @@ const CreateForm = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Task submitted:", task);
-    setTask({ title: "", description: "", dueDate: "" });
+  
+    try {
+      const response = await fetch("http://localhost:8080/api/task/add", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(task),
+      });
+  
+      if (response.ok) {
+        console.log("Task submitted successfully!");
+        setTask({ title: "", description: "", dueDate: "" });
+      } else {
+        console.error("Failed to submit task");
+      }
+    } catch (error) {
+      console.error("Error submitting task:", error);
+    }
   };
+  
 
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4">
